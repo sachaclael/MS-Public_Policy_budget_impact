@@ -1,0 +1,143 @@
+from typing import Dict, Tuple, List
+import json
+import csv
+
+# ---------- CONFIGURAÇÃO (edite aqui) ----------
+POPULACAO_BR = 213_400_000           # população IBGE usada no Cálculo 7
+PCT_REFERENCIA_SUS = 0.71            # 71% (população que tem SUS como referência)
+PCT_NECESSITA_REABILITACAO = 0.33    # 33% (GBD estimativa de necessidade)
+CUSTO_MENSAL_UNIDADE = 1_000         # R$ 1.000 por pessoa / mês (arredondado)
+
+SUS_DEPENDENTES = 52_952_423         # valor usado no Cálculo 10 (pessoas SUS dependente)
+
+# Cenários (percentuais aplicados sobre o anual)
+CENARIOS = {
+    "otimista": 0.70,
+    "conservador": 0.40,
+    "pessimista": 0.20
+}
+
+# Dados do Cálculo 11 (municípios e custos projetados) - editar se desejar
+CALC11 = [
+    {"faixa": "≤ 20.000", "municipios": 3_935, "valor_estimado": 70_830_000.00},
+    {"faixa": "20.001–50.000", "municipios": 1_053, "valor_estimado": 37_908_000.00},
+    {"faixa": "> 50.000", "municipios": 583, "valor_estimado": 31_482_000.00},
+]
+
+# ---------- FUNÇÕES UTILITÁRIAS ----------
+def brl(value: float) -> str:
+    """
+    Formata número como BRL com separadores (ex: R$ 1.234.567,89)
+    """
+    s = f"{value:,.2f}"           # padrão en_US -> '1,234,567.89'
+    # transforma para formato BR: pontos para milhares e vírgula para decimal
+    s = s.replace(",", "X").replace(".", ",").replace("X", ".")
+    return f"R$ {s}"
+
+# ---------- CÁLCULOS ----------
+def calculo_7(pop_br: int = POPULACAO_BR,
+              pct_sus_ref: float = PCT_REFERENCIA_SUS,
+              pct_need: float = PCT_NECESSITA_REABILITACAO,
+              custo_mensal: float = CUSTO_MENSAL_UNIDADE,
+              cenarios: Dict[str, float] = CENARIOS) -> Dict:
+    """
+    Reproduz o Cálculo 7 do PDF.
+    Retorna dicionário com detalhes.
+    """
+    sus_ref_pop = int(round(pop_br * pct_sus_ref))
+    elegiveis = int(round(sus_ref_pop * pct_need))
+    impacto_mensal = elegiveis * custo_mensal
+    impacto_anual = impacto_mensal * 12
+
+    cenarios_result = {}
+    for nome, pct in cenarios.items():
+        cenarios_result[nome] = {
+            "anual": int(round(impacto_anual * pct)),
+            "mensal_equivalente": int(round(impacto_anual * pct / 12))
+        }
+
+    return {
+        "pop_br": pop_br,
+        "sus_ref_pop": sus_ref_pop,
+        "elegiveis": elegiveis,
+        "impacto_mensal": int(round(impacto_mensal)),
+        "impacto_anual": int(round(impacto_anual)),
+        "cenarios": cenarios_result
+    }
+
+def calculo_10(sus_dependentes: int = SUS_DEPENDENTES,
+               custo_mensal: float = CUSTO_MENSAL_UNIDADE,
+               cenarios: Dict[str, float] = CENARIOS) -> Dict:
+    """
+    Reproduz o Cálculo 10 do PDF.
+    """
+    impacto_mensal = sus_dependentes * custo_mensal
+    impacto_anual = impacto_mensal * 12
+
+    cenarios_result = {}
+    for nome, pct in cenarios.items():
+        cenarios_result[nome] = {
+            "anual": int(round(impacto_anual * pct)),
+            "mensal_equivalente": int(round(impacto_anual * pct / 12))
+        }
+
+    return {
+        "sus_dependentes": sus_dependentes,
+        "impacto_mensal": int(round(impacto_mensal)),
+        "impacto_anual": int(round(impacto_anual)),
+        "cenarios": cenarios_result
+    }
+
+def calculo_11(config: List[Dict] = CALC11) -> Dict:
+    """
+    Retorna a projeção de custo de implantação por faixa municipal (Cálculo 11)
+    """
+    total_municipios = sum(item["municipios"] for item in config)
+    total_valor = sum(item["valor_estimado"] for item in config)
+    return {
+        "detalhes": config,
+        "total_municipios": total_municipios,
+        "total_valor": total_valor
+    }
+
+# ---------- EXECUÇÃO PRINCIPAL ----------
+def main():
+    print("\n--- Reproduzindo Cálculos (Memória) ---\n")
+    # Cálculo 7
+    c7 = calculo_7()
+    print("Cálculo 7 (PDF):")
+    print(f"  População (IBGE): {c7['pop_br']:,}")
+    print(f"  População com SUS como referência (71%): {c7['sus_ref_pop']:,}")
+    print(f"  Elegíveis (33% da população SUS-ref): {c7['elegiveis']:,}")
+    print(f"  Impacto mensal (uniário R$ {CUSTO_MENSAL_UNIDADE:,}): {brl(c7['impacto_mensal'])}")
+    print(f"  Impacto anual (x12): {brl(c7['impacto_anual'])}")
+    for nome, v in c7['cenarios'].items():
+        print(f"    - Cenário {nome}: anual = {brl(v['anual'])}  | mensal eq. = {brl(v['mensal_equivalente'])}")
+    print()
+
+    # Cálculo 10
+    c10 = calculo_10()
+    print("Cálculo 10 (PDF):")
+    print(f"  SUS dependentes: {c10['sus_dependentes']:,}")
+    print(f"  Impacto mensal: {brl(c10['impacto_mensal'])}")
+    print(f"  Impacto anual: {brl(c10['impacto_anual'])}")
+    for nome, v in c10['cenarios'].items():
+        print(f"    - Cenário {nome}: anual = {brl(v['anual'])}  | mensal eq. = {brl(v['mensal_equivalente'])}")
+    print()
+
+    # Cálculo 11
+    c11 = calculo_11()
+    print("Cálculo 11 (implantação de equipes):")
+    for item in c11['detalhes']:
+        print(f"  Faixa {item['faixa']}: {item['municipios']:,} municípios  -> Valor estimado: {brl(item['valor_estimado'])}")
+    print(f"  Total municípios: {c11['total_municipios']:,}")
+    print(f"  Custo global estimado (implantação): {brl(c11['total_valor'])}")
+    print("\n--- Fim ---\n")
+
+    # Opcional: salvar resultados em JSON (descomente se quiser)
+    # resultado = {"calculo7": c7, "calculo10": c10, "calculo11": c11}
+    # with open("resultados_impacto.json", "w", encoding="utf-8") as f:
+    #     json.dump(resultado, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    main()
