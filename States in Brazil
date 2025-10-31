@@ -1,0 +1,535 @@
+# ------------------ CONSTANTES (edite) ------------------
+PCT_NEED = 0.33  # 33% (GBD)
+CAPACITY_EQUIPE1 = 300
+CAPACITY_EQUIPE2 = 600
+CUSTO_EQUIPE1_BASE = 20000
+CUSTO_EQUIPE2_BASE = 30000
+CENARIOS = {"otimista":0.70, "conservador":0.40, "pessimista":0.20}
+
+# ------------------ DADOS BASE (somente colunas origem) ------------------
+# (extraídos das planilhas 'c07' e 'c08' - aba "UF")
+dados_c07 = [
+    {
+        "UF": "Acre",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 3,
+        "Quantidade de Municípios": 22,
+        "População Estimada IBGE 2025": 884372
+    },
+    {
+        "UF": "Alagoas",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 10,
+        "Quantidade de Municípios": 102,
+        "População Estimada IBGE 2025": 3220848
+    },
+    {
+        "UF": "Amapá",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 3,
+        "Quantidade de Municípios": 16,
+        "População Estimada IBGE 2025": 806517
+    },
+    {
+        "UF": "Amazonas",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 62,
+        "População Estimada IBGE 2025": 4321616
+    },
+    {
+        "UF": "Bahia",
+        "Quantidade de Macrorregiões de Saúde": 9,
+        "Quantidade de Regiões de Saúde": 28,
+        "Quantidade de Municípios": 417,
+        "População Estimada IBGE 2025": 14870907
+    },
+    {
+        "UF": "Ceará",
+        "Quantidade de Macrorregiões de Saúde": 5,
+        "Quantidade de Regiões de Saúde": 5,
+        "Quantidade de Municípios": 184,
+        "População Estimada IBGE 2025": 9268836
+    },
+    {
+        "UF": "Distrito Federal",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 1,
+        "Quantidade de Municípios": 1,
+        "População Estimada IBGE 2025": 3087133
+    },
+    {
+        "UF": "Espirito Santo",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 7,
+        "Quantidade de Municípios": 78,
+        "População Estimada IBGE 2025": 4057727
+    },
+    {
+        "UF": "Goiás",
+        "Quantidade de Macrorregiões de Saúde": 6,
+        "Quantidade de Regiões de Saúde": 14,
+        "Quantidade de Municípios": 246,
+        "População Estimada IBGE 2025": 7113548
+    },
+    {
+        "UF": "Maranhão",
+        "Quantidade de Macrorregiões de Saúde": 7,
+        "Quantidade de Regiões de Saúde": 19,
+        "Quantidade de Municípios": 217,
+        "População Estimada IBGE 2025": 7300353
+    },
+    {
+        "UF": "Mato Grosso",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 8,
+        "Quantidade de Municípios": 141,
+        "População Estimada IBGE 2025": 3431449
+    },
+    {
+        "UF": "Mato Grosso do Sul",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 79,
+        "População Estimada IBGE 2025": 2921655
+    },
+    {
+        "UF": "Minas Gerais",
+        "Quantidade de Macrorregiões de Saúde": 14,
+        "Quantidade de Regiões de Saúde": 67,
+        "Quantidade de Municípios": 853,
+        "População Estimada IBGE 2025": 21886373
+    },
+    {
+        "UF": "Pará",
+        "Quantidade de Macrorregiões de Saúde": 7,
+        "Quantidade de Regiões de Saúde": 19,
+        "Quantidade de Municípios": 144,
+        "População Estimada IBGE 2025": 8489415
+    },
+    {
+        "UF": "Paraíba",
+        "Quantidade de Macrorregiões de Saúde": 4,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 223,
+        "População Estimada IBGE 2025": 4070425
+    },
+    {
+        "UF": "Paraná",
+        "Quantidade de Macrorregiões de Saúde": 10,
+        "Quantidade de Regiões de Saúde": 22,
+        "Quantidade de Municípios": 399,
+        "População Estimada IBGE 2025": 11533654
+    },
+    {
+        "UF": "Pernambuco",
+        "Quantidade de Macrorregiões de Saúde": 5,
+        "Quantidade de Regiões de Saúde": 12,
+        "Quantidade de Municípios": 184,
+        "População Estimada IBGE 2025": 9690751
+    },
+    {
+        "UF": "Piauí",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 5,
+        "Quantidade de Municípios": 224,
+        "População Estimada IBGE 2025": 3562508
+    },
+    {
+        "UF": "Rio de Janeiro",
+        "Quantidade de Macrorregiões de Saúde": 4,
+        "Quantidade de Regiões de Saúde": 8,
+        "Quantidade de Municípios": 92,
+        "População Estimada IBGE 2025": 17119716
+    },
+    {
+        "UF": "Rio Grande do Norte",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 4,
+        "Quantidade de Municípios": 167,
+        "População Estimada IBGE 2025": 3715647
+    },
+    {
+        "UF": "Rio Grande do Sul",
+        "Quantidade de Macrorregiões de Saúde": 8,
+        "Quantidade de Regiões de Saúde": 19,
+        "Quantidade de Municípios": 497,
+        "População Estimada IBGE 2025": 11264105
+    },
+    {
+        "UF": "Rondônia",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 6,
+        "Quantidade de Municípios": 52,
+        "População Estimada IBGE 2025": 1803607
+    },
+    {
+        "UF": "Roraima",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 2,
+        "Quantidade de Municípios": 15,
+        "População Estimada IBGE 2025": 65264
+    },
+    {
+        "UF": "Santa Catarina",
+        "Quantidade de Macrorregiões de Saúde": 6,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 295,
+        "População Estimada IBGE 2025": 7414492
+    },
+    {
+        "UF": "São Paulo",
+        "Quantidade de Macrorregiões de Saúde": 25,
+        "Quantidade de Regiões de Saúde": 41,
+        "Quantidade de Municípios": 645,
+        "População Estimada IBGE 2025": 48408095
+    },
+    {
+        "UF": "Sergipe",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 4,
+        "Quantidade de Municípios": 75,
+        "População Estimada IBGE 2025": 2304019
+    },
+    {
+        "UF": "Tocantins",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 6,
+        "Quantidade de Municípios": 139,
+        "População Estimada IBGE 2025": 1586859
+    },
+    {
+        "UF": "Totals",
+        "Quantidade de Macrorregiões de Saúde": 121,
+        "Quantidade de Regiões de Saúde": 439,
+        "Quantidade de Municípios": 5571,
+        "População Estimada IBGE 2025": 213421037
+    }
+]
+
+dados_c08 = [
+    {
+        "UF": "Acre",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 3,
+        "Quantidade de Municípios": 22,
+        "População Estimada IBGE 2025": 884372,
+        "n com Plano de Saúde": 46335
+    },
+    {
+        "UF": "Alagoas",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 10,
+        "Quantidade de Municípios": 102,
+        "População Estimada IBGE 2025": 3220848,
+        "n com Plano de Saúde": 389616
+    },
+    {
+        "UF": "Amapá",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 3,
+        "Quantidade de Municípios": 16,
+        "População Estimada IBGE 2025": 806517,
+        "n com Plano de Saúde": 65415
+    },
+    {
+        "UF": "Amazonas",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 62,
+        "População Estimada IBGE 2025": 4321616,
+        "n com Plano de Saúde": 704001
+    },
+    {
+        "UF": "Bahia",
+        "Quantidade de Macrorregiões de Saúde": 9,
+        "Quantidade de Regiões de Saúde": 28,
+        "Quantidade de Municípios": 417,
+        "População Estimada IBGE 2025": 14870907,
+        "n com Plano de Saúde": 1786151
+    },
+    {
+        "UF": "Ceará",
+        "Quantidade de Macrorregiões de Saúde": 5,
+        "Quantidade de Regiões de Saúde": 5,
+        "Quantidade de Municípios": 184,
+        "População Estimada IBGE 2025": 9268836,
+        "n com Plano de Saúde": 1063517
+    },
+    {
+        "UF": "Distrito Federal",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 1,
+        "Quantidade de Municípios": 1,
+        "População Estimada IBGE 2025": 3087133,
+        "n com Plano de Saúde": 1259912
+    },
+    {
+        "UF": "Espirito Santo",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 7,
+        "Quantidade de Municípios": 78,
+        "População Estimada IBGE 2025": 4057727,
+        "n com Plano de Saúde": 1001569
+    },
+    {
+        "UF": "Goiás",
+        "Quantidade de Macrorregiões de Saúde": 6,
+        "Quantidade de Regiões de Saúde": 14,
+        "Quantidade de Municípios": 246,
+        "População Estimada IBGE 2025": 7113548,
+        "n com Plano de Saúde": 1388888
+    },
+    {
+        "UF": "Maranhão",
+        "Quantidade de Macrorregiões de Saúde": 7,
+        "Quantidade de Regiões de Saúde": 19,
+        "Quantidade de Municípios": 217,
+        "População Estimada IBGE 2025": 7300353,
+        "n com Plano de Saúde": 442344
+    },
+    {
+        "UF": "Mato Grosso",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 8,
+        "Quantidade de Municípios": 141,
+        "População Estimada IBGE 2025": 3431449,
+        "n com Plano de Saúde": 407696
+    },
+    {
+        "UF": "Mato Grosso do Sul",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 79,
+        "População Estimada IBGE 2025": 2921655,
+        "n com Plano de Saúde": 384305
+    },
+    {
+        "UF": "Minas Gerais",
+        "Quantidade de Macrorregiões de Saúde": 14,
+        "Quantidade de Regiões de Saúde": 67,
+        "Quantidade de Municípios": 853,
+        "População Estimada IBGE 2025": 21886373,
+        "n com Plano de Saúde": 6408739
+    },
+    {
+        "UF": "Pará",
+        "Quantidade de Macrorregiões de Saúde": 7,
+        "Quantidade de Regiões de Saúde": 19,
+        "Quantidade de Municípios": 144,
+        "População Estimada IBGE 2025": 8489415,
+        "n com Plano de Saúde": 1459072
+    },
+    {
+        "UF": "Paraíba",
+        "Quantidade de Macrorregiões de Saúde": 4,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 223,
+        "População Estimada IBGE 2025": 4070425,
+        "n com Plano de Saúde": 643755
+    },
+    {
+        "UF": "Paraná",
+        "Quantidade de Macrorregiões de Saúde": 10,
+        "Quantidade de Regiões de Saúde": 22,
+        "Quantidade de Municípios": 399,
+        "População Estimada IBGE 2025": 11533654,
+        "n com Plano de Saúde": 3609524
+    },
+    {
+        "UF": "Pernambuco",
+        "Quantidade de Macrorregiões de Saúde": 5,
+        "Quantidade de Regiões de Saúde": 12,
+        "Quantidade de Municípios": 184,
+        "População Estimada IBGE 2025": 9690751,
+        "n com Plano de Saúde": 2015885
+    },
+    {
+        "UF": "Piauí",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 5,
+        "Quantidade de Municípios": 224,
+        "População Estimada IBGE 2025": 3562508,
+        "n com Plano de Saúde": 372490
+    },
+    {
+        "UF": "Rio de Janeiro",
+        "Quantidade de Macrorregiões de Saúde": 4,
+        "Quantidade de Regiões de Saúde": 8,
+        "Quantidade de Municípios": 92,
+        "População Estimada IBGE 2025": 17119716,
+        "n com Plano de Saúde": 6939042
+    },
+    {
+        "UF": "Rio Grande do Norte",
+        "Quantidade de Macrorregiões de Saúde": 3,
+        "Quantidade de Regiões de Saúde": 4,
+        "Quantidade de Municípios": 167,
+        "População Estimada IBGE 2025": 3715647,
+        "n com Plano de Saúde": 701197
+    },
+    {
+        "UF": "Rio Grande do Sul",
+        "Quantidade de Macrorregiões de Saúde": 8,
+        "Quantidade de Regiões de Saúde": 19,
+        "Quantidade de Municípios": 497,
+        "População Estimada IBGE 2025": 11264105,
+        "n com Plano de Saúde": 2851617
+    },
+    {
+        "UF": "Rondônia",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 6,
+        "Quantidade de Municípios": 52,
+        "População Estimada IBGE 2025": 1803607,
+        "n com Plano de Saúde": 219989
+    },
+    {
+        "UF": "Roraima",
+        "Quantidade de Macrorregiões de Saúde": 1,
+        "Quantidade de Regiões de Saúde": 2,
+        "Quantidade de Municípios": 15,
+        "População Estimada IBGE 2025": 65264,
+        "n com Plano de Saúde": 4986
+    },
+    {
+        "UF": "Santa Catarina",
+        "Quantidade de Macrorregiões de Saúde": 6,
+        "Quantidade de Regiões de Saúde": 9,
+        "Quantidade de Municípios": 295,
+        "População Estimada IBGE 2025": 7414492,
+        "n com Plano de Saúde": 2383664
+    },
+    {
+        "UF": "São Paulo",
+        "Quantidade de Macrorregiões de Saúde": 25,
+        "Quantidade de Regiões de Saúde": 41,
+        "Quantidade de Municípios": 645,
+        "População Estimada IBGE 2025": 48408095,
+        "n com Plano de Saúde": 13571531
+    },
+    {
+        "UF": "Sergipe",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 4,
+        "Quantidade de Municípios": 75,
+        "População Estimada IBGE 2025": 2304019,
+        "n com Plano de Saúde": 307392
+    },
+    {
+        "UF": "Tocantins",
+        "Quantidade de Macrorregiões de Saúde": 2,
+        "Quantidade de Regiões de Saúde": 6,
+        "Quantidade de Municípios": 139,
+        "População Estimada IBGE 2025": 1586859,
+        "n com Plano de Saúde": 131748
+    },
+    {
+        "UF": "Totals",
+        "Quantidade de Macrorregiões de Saúde": 121,
+        "Quantidade de Regiões de Saúde": 439,
+        "Quantidade de Municípios": 5571,
+        "População Estimada IBGE 2025": 213421037,
+        "n com Plano de Saúde": 52959148
+    }
+]
+
+# ------------------ FUNCOES (formulas) ------------------
+import math, csv, json
+
+def calcula_33pct(pop):
+    """33% da população (elegíveis)"""
+    return pop * PCT_NEED
+
+def custo_eq_total(macrorreg, custo_base):
+    """Custo agregado por macrorregião (n_macrorreg * custo_base_equipa)"""
+    return macrorreg * custo_base
+
+def n_eq_para_zerar(eligiveis, capacidade):
+    return eligiveis / capacidade
+
+def n_eq_para_zerar_int(eligiveis, capacidade):
+    return math.ceil(n_eq_para_zerar(eligiveis, capacidade))
+
+# ------------------ REPRODUCAO CALCULO 8 (C07) ------------------
+def reproduz_calculo_8(dados):
+    resultados = []
+    for r in dados:
+        uf = r['UF']
+        pop = r['População Estimada IBGE 2025']
+        mac = r['Quantidade de Macrorregiões de Saúde']
+        elig_33 = calcula_33pct(pop)  # coluna antes: "33% do IBGE"
+        custo_eq1 = custo_eq_total(mac, CUSTO_EQUIPE1_BASE)  # coluna antes: "Custo Equipe 1"
+        custo_eq2 = custo_eq_total(mac, CUSTO_EQUIPE2_BASE)  # coluna antes: "Custo Equipe 2"
+        n_eq1 = n_eq_para_zerar(elig_33, CAPACITY_EQUIPE1)  # coluna antes: "n Equipe 1 para zerar"
+        n_eq2 = n_eq_para_zerar(elig_33, CAPACITY_EQUIPE2)  # coluna antes: "n Equipe 2 para zerar"
+        resultados.append({
+            'UF': uf,
+            'População Estimada IBGE 2025': pop,
+            '33% do IBGE (calculado)': int(round(elig_33)),
+            'Custo Equipe 1 (calculado)': int(round(custo_eq1)),
+            'Custo Equipe 2 (calculado)': int(round(custo_eq2)),
+            'n Equipe 1 para zerar (float)': n_eq1,
+            'n Equipe 2 para zerar (float)': n_eq2,
+            'n Equipe 1 para zerar (int, ceil)': n_eq_para_zerar_int(elig_33, CAPACITY_EQUIPE1),
+            'n Equipe 2 para zerar (int, ceil)': n_eq_para_zerar_int(elig_33, CAPACITY_EQUIPE2),
+        })
+    return resultados
+
+# ------------------ REPRODUCAO CALCULO 9 (C08) ------------------
+def reproduz_calculo_9(dados):
+    resultados = []
+    for r in dados:
+        uf = r['UF']
+        pop = r['População Estimada IBGE 2025']
+        mac = r['Quantidade de Macrorregiões de Saúde']
+        n_plano = r['n com Plano de Saúde']
+        elig_33_geral = calcula_33pct(pop)  # "33% do IBGE"
+        pop_sem_plano = pop - n_plano  # base para SUS dependente
+        elig_33_sem_plano = calcula_33pct(pop_sem_plano)  # "33% sem Plano de Saúde"
+        custo_eq1 = custo_eq_total(mac, CUSTO_EQUIPE1_BASE)
+        custo_eq2 = custo_eq_total(mac, CUSTO_EQUIPE2_BASE)
+        n_eq1_geral = n_eq_para_zerar(elig_33_geral, CAPACITY_EQUIPE1)
+        n_eq2_geral = n_eq_para_zerar(elig_33_geral, CAPACITY_EQUIPE2)
+        n_eq1_sus = n_eq_para_zerar(elig_33_sem_plano, CAPACITY_EQUIPE1)
+        n_eq2_sus = n_eq_para_zerar(elig_33_sem_plano, CAPACITY_EQUIPE2)
+        resultados.append({
+            'UF': uf,
+            'População Estimada IBGE 2025': pop,
+            'n com Plano de Saúde': n_plano,
+            '33% do IBGE (geral)': int(round(elig_33_geral)),
+            'Pop sem plano': int(round(pop_sem_plano)),
+            '33% sem Plano (calculado)': int(round(elig_33_sem_plano)),
+            'Custo Equipe 1 (calculado)': int(round(custo_eq1)),
+            'Custo Equipe 2 (calculado)': int(round(custo_eq2)),
+            'n Eqp1 zerar (geral, int)': n_eq_para_zerar_int(elig_33_geral, CAPACITY_EQUIPE1),
+            'n Eqp2 zerar (geral, int)': n_eq_para_zerar_int(elig_33_geral, CAPACITY_EQUIPE2),
+            'n Eqp1 zerar (SUS dep, int)': n_eq_para_zerar_int(elig_33_sem_plano, CAPACITY_EQUIPE1),
+            'n Eqp2 zerar (SUS dep, int)': n_eq_para_zerar_int(elig_33_sem_plano, CAPACITY_EQUIPE2),
+        })
+    return resultados
+
+def salva_csv(lista, caminho):
+    if not lista:
+        return
+    chaves = list(lista[0].keys())
+    with open(caminho, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=chaves)
+        writer.writeheader()
+        for row in lista:
+            writer.writerow(row)
+
+if __name__ == '__main__':
+    res8 = reproduz_calculo_8(dados_c07)
+    res9 = reproduz_calculo_9(dados_c08)
+    print('Cálculo 8 - Exemplo 5 primeiras UFs:')
+    for r in res8[:5]:
+        print(' ', r)
+    print('\nCálculo 9 - Exemplo 5 primeiras UFs:')
+    for r in res9[:5]:
+        print(' ', r)
+    salva_csv(res8, 'resumo_calc08.csv')
+    salva_csv(res9, 'resumo_calc09.csv')
+    with open('resumo_calc08.json', 'w', encoding='utf-8') as f: json.dump(res8, f, ensure_ascii=False, indent=2)
+    with open('resumo_calc09.json', 'w', encoding='utf-8') as f: json.dump(res9, f, ensure_ascii=False, indent=2)
+    print('\nArquivos CSV/JSON gerados: resumo_calc08.csv, resumo_calc09.csv, resumo_calc08.json, resumo_calc09.json')
